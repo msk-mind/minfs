@@ -231,6 +231,8 @@ func (dir *Dir) scan(ctx context.Context) error {
 		return nil
 	}
 
+	fmt.Println("dir.mfs", dir.mfs)
+
 	tx, err := dir.mfs.db.Begin(true)
 	if err != nil {
 		return err
@@ -303,7 +305,7 @@ func (dir *Dir) scan(ctx context.Context) error {
 
 // ReadDirAll will return all files in current dir
 func (dir *Dir) ReadDirAll(ctx context.Context, uid uint32) ([]fuse.Dirent, error) {
-
+	fmt.Println("ReadDirAll()")
 	// Referesh every ReadDir
 	dir.scanned = false
 
@@ -331,6 +333,7 @@ func (dir *Dir) ReadDirAll(ctx context.Context, uid uint32) ([]fuse.Dirent, erro
 	}); err != nil {
 		return nil, err
 	}
+	fmt.Println("Completed ReadDirAll:", entries)
 
 	return entries, nil
 }

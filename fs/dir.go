@@ -105,12 +105,12 @@ func (dir *Dir) Lookup(ctx context.Context, name string, uid uint32) (fs.Node, e
 	// fmt.Printf("t1: %T, %T\n", o, o.(Dir))
 
 	if file, ok := o.(File); ok {
-		// file.mfs = dir.mfs
-		// file.dir = dir
+		file.mfs = dir.mfs
+		file.dir = dir
 		return &file, nil
 	} else if subdir, ok := o.(Dir); ok {
-		// subdir.mfs = dir.mfs
-		// subdir.dir = dir
+		subdir.mfs = dir.mfs
+		subdir.dir = dir
 		return &subdir, nil
 	}
 
@@ -230,8 +230,6 @@ func (dir *Dir) scan(ctx context.Context) error {
 	if !dir.needsScan() {
 		return nil
 	}
-
-	fmt.Println("dir.mfs", dir.mfs)
 
 	tx, err := dir.mfs.db.Begin(true)
 	if err != nil {
